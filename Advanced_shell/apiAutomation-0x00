@@ -7,15 +7,14 @@ URL="https://pokeapi.co/api/v2/pokemon/pikachu"
 DATA_FILE="data.json"
 ERROR_FILE="errors.txt"
 
-# Make request
-curl -s -o "$DATA_FILE" -w "%{http_code}" "$URL" > status_code.txt
+# Make request and format JSON
+HTTP_RESPONSE=$(curl -s -w "%{http_code}" "$URL")
+HTTP_BODY=$(echo "$HTTP_RESPONSE" | head -c -3)
+STATUS_CODE=$(echo "$HTTP_RESPONSE" | tail -c 3)
 
-# Read status code
-STATUS_CODE=$(cat status_code.txt)
-rm status_code.txt
-
-# Check if request was successful
-if [ "$STATUS_CODE" -ne 200 ]; then
+if [ "$STATUS_CODE" -eq 200 ]; then
+    echo "$HTTP_BODY" | jq . > "$DATA_FILE"
+else
     echo "Request failed with status code: $STATUS_CODE" >> "$ERROR_FILE"
     rm -f "$DATA_FILE"
 fi

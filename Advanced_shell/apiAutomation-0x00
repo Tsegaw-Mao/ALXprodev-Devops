@@ -16,5 +16,6 @@ if [ "$STATUS_CODE" -eq 200 ]; then
     echo "$HTTP_BODY" | jq . > "$DATA_FILE"
 else
     echo "Request failed with status code: $STATUS_CODE" >> "$ERROR_FILE"
+    echo "$HTTP_BODY" | jq . > "$DATA_FILE"
     rm -f "$DATA_FILE"
 fi

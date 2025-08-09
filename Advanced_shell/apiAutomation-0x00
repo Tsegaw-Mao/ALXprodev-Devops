@@ -8,7 +8,7 @@ DATA_FILE="data.json"
 ERROR_FILE="errors.txt"
 
 # Make request and format JSON
-HTTP_RESPONSE=$(curl -s -o "out.txt" -w "%{http_code}" "$URL")
+HTTP_RESPONSE=$(curl -s -w "%{http_code}" "$URL")
 HTTP_BODY=$(echo "$HTTP_RESPONSE" | head -c -3)
 STATUS_CODE=$(echo "$HTTP_RESPONSE" | tail -c 3)
 
@@ -16,6 +16,5 @@ if [ "$STATUS_CODE" -eq 200 ]; then
     echo "$HTTP_BODY" | jq . > "$DATA_FILE"
 else
     echo "Request failed with status code: $STATUS_CODE" >> "$ERROR_FILE"
-    echo "$HTTP_BODY" | jq . > "$DATA_FILE"
     rm -f "$DATA_FILE"
 fi

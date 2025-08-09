@@ -40,7 +40,7 @@ for pokemon in "${POKEMONS[@]}"; do
     fetch_pokemon "$pokemon" &
 done
 
-# Wait for all to finish
+# Wait for all jobs to finish
 wait
 
 echo "All Pokémon data fetched."
